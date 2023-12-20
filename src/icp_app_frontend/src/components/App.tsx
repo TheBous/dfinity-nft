@@ -1,42 +1,41 @@
-import * as React from "react";
-import { AuthClient } from "@dfinity/auth-client";
-import { Actor, HttpAgent } from "@dfinity/agent";
-import { idlFactory as idlFactoryThebous } from "../../../declarations/thebous/index";
+import React, { useEffect } from "react";
+// import { AuthClient } from "@dfinity/auth-client";
+// import { Actor, HttpAgent } from "@dfinity/agent";
+// import { idlFactory as idlFactoryThebous } from "../.2./../declarations/thebous/index";
 import dfinity from "../../assets/images/dfinity.jpg";
+import { useAuth } from "../hooks/auth/useAuth";
+// import { decodeIcrcAccount } from "@dfinity/ledger-icrc";
+// import { Principal } from "@dfinity/principal";
 
 const App = () => {
-    const login = async () => {
-        const authClient = await AuthClient.create();
-        const isLocalDevelopment = process.env.DFX_NETWORK === "local"
-        const identityProviderUrl = !isLocalDevelopment
-            ? "https://identity.ic0.app/#authorize"
-            : `http://localhost:4943?canisterId=${process.env.CANISTER_ID_INTERNET_IDENTITY}#authorize`;
+    const { identity, IISync, IISignin, IILogout } = useAuth();
 
-        authClient.login({
-            identityProvider: identityProviderUrl,
-            maxTimeToLive: BigInt(7 * 24 * 60 * 60 * 1000 * 1000 * 1000),
-            onSuccess: async () => {
-                const identity = await authClient.getIdentity();
-                const principal = identity.getPrincipal().toString();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => { IISync(); }, []);
 
-                const agent = new HttpAgent({ identity });
-                if (identityProviderUrl) await agent.fetchRootKey();
+    // authClient.login({
+    //     identityProvider: identityProviderUrl,
+    //     maxTimeToLive: BigInt(7 * 24 * 60 * 60 * 1000 * 1000 * 1000),
+    //     onSuccess: async () => {
+    //         const identity = authClient.getIdentity();
+    //         const principal = identity.getPrincipal().toString();
 
-                // LOGIN TO UR CANISTER
-                const actor = Actor.createActor(idlFactoryThebous, {
-                    agent,
-                    canisterId: process.env.CANISTER_ID_THEBOUS,
-                });
+    //         const decoded = decodeIcrcAccount(principal);
+    //         console.warn(decoded.subaccount, decoded.owner);
 
-                console.warn(actor, identity, identity.getPrincipal());
+    //         const agent = new HttpAgent({ identity });
+    //         if (identityProviderUrl) await agent.fetchRootKey();
 
-                const balance = await actor.icrc1_balance_of({ owner: principal });
-                console.warn('balance', balance);
+    //         // LOGIN TO UR CANISTER
+    //         const actor = Actor.createActor(idlFactoryThebous, {
+    //             agent,
+    //             canisterId: process.env.CANISTER_ID_THEBOUS,
+    //         });
 
-                // const principalInApp = await actor.whoami();
-            },
-        });
-    };
+    //         const balance = await actor.icrc1_balance_of({ owner: "sbduh-sgaas-dtvyq-wp7wi-dtood-inxjk-mlwu2-kzqel-lpubj-xwnlt-wae", subaccount: decoded.subaccount ?? null });
+    //         console.warn('balance', balance);
+    //     },
+    // });
 
     return (
         <div className="w-screen h-screen flex justify-center items-center">
@@ -49,7 +48,8 @@ const App = () => {
                     </h2>
                     <p>Join the best dfinity NFT community!</p>
                     <div className="card-actions justify-end">
-                        <button onClick={login} className="btn btn-primary">Login</button>
+                        {!identity && <button onClick={IISignin} className="btn btn-primary">Login</button>}
+                        {!!identity && <button onClick={IILogout} className="btn btn-secondary">Logout</button>}
                     </div>
                 </div>
             </div>

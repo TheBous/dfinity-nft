@@ -34,9 +34,12 @@
 		"@dfinity/auth-client": "^0.20.2",
 		"@dfinity/candid": "^0.20.2",
 		"@dfinity/identity": "^0.20.2",
+		"@dfinity/ledger-icrc": "^2.1.0",
 		"@dfinity/principal": "^0.20.2",
+		"@dfinity/utils": "^2.0.0",
 		"react": "^18.2.0",
-		"react-dom": "^18.2.0"
+		"react-dom": "^18.2.0",
+		"zustand": "^4.4.7"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.23.6",
@@ -44,6 +47,7 @@
 		"@babel/preset-react": "^7.23.3",
 		"@commitlint/cli": "^18.4.3",
 		"@commitlint/config-conventional": "^18.4.3",
+		"@types/react": "^18.2.45",
 		"@typescript-eslint/eslint-plugin": "^6.15.0",
 		"assert": "2.0.0",
 		"autoprefixer": "^10.4.16",
