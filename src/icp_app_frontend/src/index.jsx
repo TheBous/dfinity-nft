@@ -1,8 +1,11 @@
+import './app.css';
+
 import React from "react";
-import { createRoot } from "react-dom";
+import { createRoot } from "react-dom/client";
 import { AuthClient } from "@dfinity/auth-client";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { idlFactory } from "../../declarations/icp_app_backend/index";
+import dfinity from "../assets/images/dfinity.jpg";
 
 const App = () => {
   const login = async () => {
@@ -36,13 +39,21 @@ const App = () => {
     });
   };
 
-  const onIdentityClick = async () => {
-    await login();
-  };
-
   return (
-    <div style={{ "fontSize": "30px" }}>
-      <button onClick={onIdentityClick}>Internet Identity</button>
+    <div className="w-screen h-screen flex justify-center items-center">
+      <div className="card w-96 bg-base-100 shadow-xl">
+        <figure><img src={dfinity} alt="dfinity" /></figure>
+        <div className="card-body">
+          <h2 className="card-title">
+            dfinity NFT!
+            <div className="badge badge-secondary">NEW</div>
+          </h2>
+          <p>Join the best dfinity NFT community!</p>
+          <div className="card-actions justify-end">
+            <button onClick={login} className="btn btn-primary">Login</button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
