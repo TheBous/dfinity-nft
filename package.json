@@ -23,7 +23,8 @@
 		"start:ic": "dfx start --background --clean",
 		"prepare": "husky install",
 		"deploy:prod": "dfx canister --network ic create first_canister && dfx build --network ic icp_app_frontend && dfx canister --network ic install icp_app_frontend",
-		"deploy:prod:with:cycles": "dfx canister --network ic create first_canister --with-cycles 1000000000000"
+		"deploy:prod:with:cycles": "dfx canister --network ic create first_canister --with-cycles 1000000000000",
+		"update:install:frontend": "dfx build --network ic icp_app_frontend && yesdfx canister --network ic install icp_app_frontend --mode reinstall"
 	},
 	"dependencies": {
 		"@dfinity/agent": "^0.20.2",
