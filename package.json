@@ -15,16 +15,17 @@
 		"deploy:local": "dfx deploy --network=local",
 		"lint": "eslint ./src/icp_app_frontend",
 		"deploy:ic": "dfx deploy --network=ic",
-		"generate": "dfx generate icp_app_backend",
+		"generate": "dfx generate $canister",
 		"canister:status": "dfx canister status --all",
 		"canister:stop:all": "dfx canister stop --all",
 		"canister:delete:all": "dfx canister delete --all",
 		"canister:deploy": "dfx deploy",
 		"start:ic": "dfx start --background --clean",
 		"prepare": "husky install",
-		"deploy:prod": "dfx canister --network ic create first_canister && dfx build --network ic icp_app_frontend && dfx canister --network ic install icp_app_frontend",
-		"deploy:prod:with:cycles": "dfx canister --network ic create first_canister --with-cycles 1000000000000",
-		"update:install:frontend": "dfx build --network ic icp_app_frontend && yesdfx canister --network ic install icp_app_frontend --mode reinstall"
+		"deploy:prod": "dfx canister --network ic create $canister && dfx build --network ic $canister && dfx canister --network ic install $canister",
+		"deploy:prod:with:cycles": "dfx canister --network ic create $canister --with-cycles 1000000000000",
+		"update:install:frontend": "dfx build --network ic $canister && dfx canister --network ic install $canister --mode reinstall",
+		"mio-script": "bash -c 'echo $canister'"
 	},
 	"dependencies": {
 		"@dfinity/agent": "^0.20.2",
