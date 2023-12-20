@@ -25,7 +25,8 @@
 		"deploy:prod": "dfx canister --network ic create $canister && dfx build --network ic $canister && dfx canister --network ic install $canister",
 		"deploy:prod:with:cycles": "dfx canister --network ic create $canister --with-cycles 1000000000000",
 		"update:install:frontend": "dfx build --network ic $canister && dfx canister --network ic install $canister --mode reinstall",
-		"mio-script": "bash -c 'echo $canister'"
+		"deploy:icrc1": "PRINCIPAL=$(dfx identity get-principal) bash ./scripts/deploy_icrc1.sh",
+		"mint:to:owner": "bash ./scripts/mint.sh"
 	},
 	"dependencies": {
 		"@dfinity/agent": "^0.20.2",

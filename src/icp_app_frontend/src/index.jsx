@@ -1,13 +1,17 @@
 import './app.css';
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { AuthClient } from "@dfinity/auth-client";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { idlFactory } from "../../declarations/icp_app_backend/index";
+import { idlFactory as idlFactoryThebous } from "../../declarations/thebous/index";
 import dfinity from "../assets/images/dfinity.jpg";
 
 const App = () => {
+  const [isLogged, setIsLogged] = useState(false);
+  const [actor, setActor] = useState(null);
+
   const login = async () => {
     const authClient = await AuthClient.create();
     const isLocalDevelopment = process.env.DFX_NETWORK === "local"
@@ -23,26 +27,41 @@ const App = () => {
         const principal = identity.getPrincipal().toString();
         console.warn(principal);
 
+        console.warn(process.env.CANISTER_ID_THEBOUS);
         const agent = new HttpAgent({ identity });
         if (identityProviderUrl) await agent.fetchRootKey();
 
-        console.warn(process.env.CANISTER_ID_ICP_APP_BACKEND);
+        console.warn(process.env.CANISTER_ID_THEBOUS);
         // LOGIN TO UR CANISTER
-        const actor = Actor.createActor(idlFactory, {
+        const actor = Actor.createActor(idlFactoryThebous, {
           agent,
-          canisterId: process.env.CANISTER_ID_ICP_APP_BACKEND,
+          canisterId: process.env.CANISTER_ID_THEBOUS,
         });
 
-        const principalInApp = await actor.whoami();
-        console.warn(principalInApp);
+        debugger;
+        // const principalInApp = await actor.whoami();
+        setIsLogged(true);
+        setActor(actor);
+        // console.warn(principalInApp.toString());
       },
     });
   };
 
+  useEffect(() => {
+    const getBalance = async () => {
+      if (isLogged) {
+        const balance = await actor.getBalance();
+        console.warn('balance', balance);
+      }
+    };
+
+    getBalance();
+  }, [])
+
   return (
     <div className="w-screen h-screen flex justify-center items-center">
       <div className="card w-96 bg-base-100 shadow-xl">
-        <figure><img src={dfinity} alt="dfinity" /></figure>
+        <figure><img loading="lazy" src={dfinity} alt="dfinity" /></figure>
         <div className="card-body">
           <h2 className="card-title">
             dfinity NFT!

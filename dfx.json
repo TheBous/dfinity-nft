@@ -1,8 +1,9 @@
 {
 	"canisters": {
-		"icp_app_backend": {
-			"main": "src/icp_app_backend/main.mo",
-			"type": "motoko"
+		"thebous": {
+			"type": "custom",
+			"candid": "https://raw.githubusercontent.com/dfinity/ic/d87954601e4b22972899e9957e800406a0a6b929/rs/rosetta-api/icrc1/ledger/ledger.did",
+			"wasm": "https://download.dfinity.systems/ic/d87954601e4b22972899e9957e800406a0a6b929/canisters/ic-icrc1-ledger.wasm.gz"
 		},
 		"internet_identity": {
 			"type": "custom",
@@ -14,6 +15,10 @@
 				}
 			},
 			"frontend": {}
+		},
+		"icp_app_backend": {
+			"main": "src/icp_app_backend/main.mo",
+			"type": "motoko"
 		},
 		"icp_app_frontend": {
 			"dependencies": ["icp_app_backend"],

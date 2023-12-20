@@ -1,0 +1,1 @@
+dfx canister call thebous icrc1_transfer '(record {to_principal=principal "vtndr-batuc-fixct-qvayd-i3n6g-ghnx3-rg7sw-dgmrf-7zcwd-qg7vm-sqe"; amount=1_000_000},)'
