@@ -9,7 +9,7 @@ let authClient: AuthClient | undefined | null;
 
 export const useAuth = () => {
     const { identity, setIdentity } = useAuthStore();
-    const IISignin = async () => {
+    const internetIdentityLogin = async () => {
         authClient = authClient ?? (await createAuthClient());
 
         await authClient?.login({
@@ -23,7 +23,7 @@ export const useAuth = () => {
         });
     };
 
-    const IILogout = async () => {
+    const internetIdentityLogout = async () => {
         logWithTimestamp(authClient);
         const client: AuthClient = authClient ?? (await createAuthClient());
         await client.logout();
@@ -33,7 +33,7 @@ export const useAuth = () => {
         setIdentity(null);
     };
 
-    const IISync = async () => {
+    const internetIdentitySync = async () => {
         authClient = authClient ?? (await createAuthClient());
         const isAuthenticated = await authClient.isAuthenticated();
         setIdentity(isAuthenticated ? authClient.getIdentity() : null);
@@ -41,8 +41,8 @@ export const useAuth = () => {
 
     return {
         identity,
-        IISignin,
-        IILogout,
-        IISync
+        internetIdentitySync,
+        internetIdentityLogin,
+        internetIdentityLogout
     }
 };

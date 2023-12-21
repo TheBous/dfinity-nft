@@ -5,9 +5,6 @@ import IdentityAgentWrapper from "./identityAgent";
 type PrincipalAsText = string;
 let agents: Record<PrincipalAsText, HttpAgent> | undefined | null = undefined;
 
-
-
-
 export const createAgentWrapper = async ({
     identity,
     host,

@@ -6,10 +6,10 @@ import { createAgentWrapper } from "../agent";
 interface Icrc1Canister {
     identity: Identity;
     canisterId: Principal;
-    host: string;
+    host?: string;
 }
 
-export const icrc1Canister = async ({
+export const createIcrcCanister = async ({
     identity,
     canisterId,
     host,

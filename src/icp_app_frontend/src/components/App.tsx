@@ -1,58 +1,79 @@
-import React, { useEffect } from "react";
-// import { AuthClient } from "@dfinity/auth-client";
-// import { Actor, HttpAgent } from "@dfinity/agent";
-// import { idlFactory as idlFactoryThebous } from "../.2./../declarations/thebous/index";
+import React, { useEffect, useState } from "react";
 import dfinity from "../../assets/images/dfinity.jpg";
 import { useAuth } from "../hooks/auth/useAuth";
-// import { decodeIcrcAccount } from "@dfinity/ledger-icrc";
-// import { Principal } from "@dfinity/principal";
+import getIcrc1Balance from "../utils/dfinity/icrc1/methods/getBalance";
 
 const App = () => {
-    const { identity, IISync, IISignin, IILogout } = useAuth();
+    const { identity, internetIdentitySync, internetIdentityLogin, internetIdentityLogout } = useAuth();
+    const [balance, setBalance] = useState(BigInt(0));
+    const [isSendModalOpened, setIsSendModalOpened] = useState(false);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect(() => { IISync(); }, []);
+    useEffect(() => { internetIdentitySync(); }, []);
+    useEffect(() => {
+        const getBalance = async () => {
+            const data = {
+                ledgerCanisterId: process.env.CANISTER_ID_THEBOUS,
+                certified: false,
+            };
+            const _balance = await getIcrc1Balance({
+                identity,
+                data
+            })
+            setBalance(_balance)
+        }
 
-    // authClient.login({
-    //     identityProvider: identityProviderUrl,
-    //     maxTimeToLive: BigInt(7 * 24 * 60 * 60 * 1000 * 1000 * 1000),
-    //     onSuccess: async () => {
-    //         const identity = authClient.getIdentity();
-    //         const principal = identity.getPrincipal().toString();
+        if (identity) getBalance();
 
-    //         const decoded = decodeIcrcAccount(principal);
-    //         console.warn(decoded.subaccount, decoded.owner);
+    }, [identity]);
 
-    //         const agent = new HttpAgent({ identity });
-    //         if (identityProviderUrl) await agent.fetchRootKey();
-
-    //         // LOGIN TO UR CANISTER
-    //         const actor = Actor.createActor(idlFactoryThebous, {
-    //             agent,
-    //             canisterId: process.env.CANISTER_ID_THEBOUS,
-    //         });
-
-    //         const balance = await actor.icrc1_balance_of({ owner: "sbduh-sgaas-dtvyq-wp7wi-dtood-inxjk-mlwu2-kzqel-lpubj-xwnlt-wae", subaccount: decoded.subaccount ?? null });
-    //         console.warn('balance', balance);
-    //     },
-    // });
+    const showSendModal = () => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        document.getElementById('my_modal_1').showModal();
+    }
 
     return (
         <div className="w-screen h-screen flex justify-center items-center">
+            {!!identity && <div className="badge badge-primary absolute top-3 right-2 h-10">
+                {identity?.getPrincipal()?.toText()}
+            </div>}
             <div className="card w-96 bg-base-100 shadow-xl">
                 <figure><img loading="lazy" src={dfinity} alt="dfinity" /></figure>
                 <div className="card-body">
                     <h2 className="card-title">
-                        dfinity NFT!
+                        dfinity ICRC2!
                         <div className="badge badge-secondary">NEW</div>
                     </h2>
-                    <p>Join the best dfinity NFT community!</p>
+                    {!identity && <p>Join the best dfinity ICRC2 community!</p>}
+                    {!!identity && <p>
+                        <span>thebous amount: </span>
+                        <span className="text-red-400">{balance.toString()}</span>
+                        <span> thebous</span>
+                    </p>}
                     <div className="card-actions justify-end">
-                        {!identity && <button onClick={IISignin} className="btn btn-primary">Login</button>}
-                        {!!identity && <button onClick={IILogout} className="btn btn-secondary">Logout</button>}
+                        {!identity && <button onClick={internetIdentityLogin} className="btn btn-primary">Login</button>}
+                        {!!identity && <div className="flex gap-2">
+                            <button onClick={internetIdentityLogout} className="btn btn-secondary">Logout</button>
+                            <button onClick={showSendModal}
+                                // disabled={balance <= BigInt(0)}
+                                className="btn btn-primary">Send</button>
+                            <button onClick={internetIdentityLogout} className="btn btn-tertiary">Receive</button>
+                        </div>}
                     </div>
                 </div>
             </div>
+            <dialog id="my_modal_1" className="modal">
+                <div className="modal-box">
+                    <h3 className="font-bold text-lg">Send</h3>
+                    <p className="py-4">Press ESC key or click the button below to close</p>
+                    <div className="modal-action">
+                        <form method="dialog">
+                            <button className="btn">Close</button>
+                        </form>
+                    </div>
+                </div>
+            </dialog>
         </div>
     );
 };
