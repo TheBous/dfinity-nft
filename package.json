@@ -9,6 +9,15 @@
 		"JavaScript",
 		"Canister"
 	],
+	"lint-staged": {
+		"*.{css,less,scss,html,json,jsx,js}": [
+			"prettier --write ."
+		],
+		"*.js": "eslint --fix",
+		"*.ts": "eslint --fix",
+		"*.tsx": "eslint --fix",
+		"*.jsx": "eslint --fix"
+	},
 	"scripts": {
 		"build": "webpack",
 		"prebuild": "dfx generate",
@@ -67,6 +76,7 @@
 		"file-loader": "^6.2.0",
 		"html-webpack-plugin": "5.5.0",
 		"husky": "^8.0.0",
+		"lint-staged": "^15.2.0",
 		"postcss-loader": "^7.3.3",
 		"prettier": "^3.1.1",
 		"process": "0.11.10",
