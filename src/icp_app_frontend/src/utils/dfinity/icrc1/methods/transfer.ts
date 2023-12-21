@@ -30,7 +30,6 @@ export const executeIcrcTransfer = async ({
         agent, canister: { transfer: transferApi },
     } = await createIcrcCanister({ identity, canisterId: mapCanisterId(canisterId) });
 
-    debugger;
     await agent.fetchRootKey();
     return transferApi({
         to: {

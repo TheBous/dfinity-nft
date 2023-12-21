@@ -70,7 +70,7 @@ const App = () => {
                     {!!identity && <p>
                         <span>thebous amount: </span>
                         <span className="text-red-400">{balance.toString()}</span>
-                        <span> thebous</span>
+                        <span> THB</span>
                     </p>}
                     <div className="card-actions justify-end">
                         {!identity && <button onClick={internetIdentityLogin} className="btn btn-primary">Login</button>}
