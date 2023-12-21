@@ -1,6 +1,5 @@
-import { nonNullish } from "@dfinity/utils";
+import { nonNullish } from '@dfinity/utils'
 
-const isNode = (): boolean =>
-    typeof process !== "undefined" && nonNullish(process.versions?.node);
+const isNode = (): boolean => typeof process !== 'undefined' && nonNullish(process.versions?.node)
 
-export default isNode;
+export default isNode

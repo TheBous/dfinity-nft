@@ -1,13 +1,13 @@
 const config = {
 	presets: [
-		"@babel/preset-env",
+		'@babel/preset-env',
 		[
-			"@babel/preset-react",
+			'@babel/preset-react',
 			{
-				"runtime": "automatic"
-			}
-		]
+				runtime: 'automatic',
+			},
+		],
 	],
-};
+}
 
-export default config;
+export default config

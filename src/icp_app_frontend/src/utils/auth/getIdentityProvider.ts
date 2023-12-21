@@ -1,10 +1,10 @@
-import isTestnet from "../dfinity/utils/isTestnet";
+import isTestnet from '../dfinity/utils/isTestnet'
 
 const getIdentityProviderUrl = () => {
-    const isLocalDevelopment = isTestnet();
-    return !isLocalDevelopment
-        ? "https://identity.ic0.app/#authorize"
-        : `http://localhost:4943?canisterId=${process.env.CANISTER_ID_INTERNET_IDENTITY}#authorize`;
-};
+	const isLocalDevelopment = isTestnet()
+	return !isLocalDevelopment
+		? 'https://identity.ic0.app/#authorize'
+		: `http://localhost:4943?canisterId=${process.env.CANISTER_ID_INTERNET_IDENTITY}#authorize`
+}
 
-export default getIdentityProviderUrl;
+export default getIdentityProviderUrl
