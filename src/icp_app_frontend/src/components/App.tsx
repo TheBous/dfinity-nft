@@ -6,14 +6,24 @@ import getIcrc1Balance from "../utils/dfinity/icrc1/methods/getBalance";
 import executeIcrcTransfer from "../utils/dfinity/icrc1/methods/transfer";
 import { decodeIcrcAccount } from "@dfinity/ledger-icrc";
 import { transactionFee } from "../utils/dfinity/icrc1/methods/fees";
+import { principalToSubAccount } from "@dfinity/utils";
+import { SubAccount } from "@dfinity/ledger-icp";
 
 const App = () => {
     const { identity, internetIdentitySync, internetIdentityLogin, internetIdentityLogout } = useAuth();
     const [balance, setBalance] = useState(BigInt(0));
     const [address, setAddress] = useState("");
+    const [amount, setAmount] = useState(BigInt(0));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => { internetIdentitySync(); }, []);
+    useEffect(() => {
+        if (identity?.getPrincipal()) {
+            const subaccount = principalToSubAccount(identity?.getPrincipal());
+            const sub = SubAccount.fromBytes(subaccount)
+            console.warn(sub);
+        }
+    }, [identity])
     useEffect(() => {
         const getBalance = async () => {
             const data = {
@@ -44,18 +54,23 @@ const App = () => {
     }
 
     const transfer = async () => {
-        const fees = await transactionFee({ identity, certified: true, canisterId: process.env.CANISTER_ID_THEBOUS });
-        await executeIcrcTransfer({
-            identity,
-            canisterId: process.env.CANISTER_ID_THEBOUS,
-            to: decodeIcrcAccount(address),
-            amount: BigInt(10_000),
-            fee: fees,
-        });
-    };
+        try {
+            const fees = await transactionFee({ identity, certified: true, canisterId: process.env.CANISTER_ID_THEBOUS });
+            await executeIcrcTransfer({
+                identity,
+                canisterId: process.env.CANISTER_ID_THEBOUS,
+                to: decodeIcrcAccount(address),
+                amount,
+                fee: fees,
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <div className="w-screen h-screen flex justify-center items-center">
+
             {!!identity && <div className="badge badge-primary absolute top-3 right-2 h-10">
                 {identity?.getPrincipal()?.toText()}
             </div>}
@@ -88,7 +103,7 @@ const App = () => {
                 <div className="modal-box">
                     <h3 className="font-bold text-lg">Send</h3>
                     <p className="py-4">Insert the amount you wanna send!</p>
-                    <input type="number" placeholder="Inser amount" className="input input-bordered w-full" />
+                    <input onChange={(e) => setAmount(BigInt(e?.target?.value))} type="number" placeholder="Inser amount" className="input input-bordered w-full" />
                     <input onChange={(e) => setAddress(e?.target?.value ?? "")} type="string" placeholder="Insert receiver" className="input input-bordered w-full my-5" />
                     <div className="modal-action">
                         <button onClick={transfer} className="btn btn-primary">Send</button>
@@ -119,6 +134,5 @@ const App = () => {
         </div>
     );
 };
-
 
 export default App;
