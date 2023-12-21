@@ -1,4 +1,4 @@
-import { IcrcAccount, IcrcBlockIndex, TransferParams } from "@dfinity/ledger-icrc";
+import { IcrcAccount, IcrcBlockIndex } from "@dfinity/ledger-icrc";
 import { Identity } from "@dfinity/agent";
 import { arrayOfNumberToUint8Array, nonNullish, toNullable } from "@dfinity/utils";
 import nowInBigIntNanoSeconds from "../../../date/nowInBigIntNanoSeconds";
@@ -25,13 +25,13 @@ export const executeIcrcTransfer = async ({
     fromSubAccount,
     createdAt,
     ...rest
-}: IcrcTransferParams & {
-    transfer: (params: TransferParams) => Promise<IcrcBlockIndex>;
-}): Promise<IcrcBlockIndex> => {
+}: IcrcTransferParams): Promise<IcrcBlockIndex> => {
     const {
-        canister: { transfer: transferApi },
+        agent, canister: { transfer: transferApi },
     } = await createIcrcCanister({ identity, canisterId: mapCanisterId(canisterId) });
 
+    debugger;
+    await agent.fetchRootKey();
     return transferApi({
         to: {
             owner,
