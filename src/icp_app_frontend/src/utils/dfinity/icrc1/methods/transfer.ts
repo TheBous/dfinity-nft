@@ -4,6 +4,7 @@ import { arrayOfNumberToUint8Array, nonNullish, toNullable } from "@dfinity/util
 import nowInBigIntNanoSeconds from "../../../date/nowInBigIntNanoSeconds";
 import { createIcrcCanister } from "../icrc1";
 import mapCanisterId from "../../mapCanisterId";
+import isTestnet from "../../utils/isTestnet";
 
 
 export type SubAccountArray = Array<number>;
@@ -30,7 +31,7 @@ export const executeIcrcTransfer = async ({
         agent, canister: { transfer: transferApi },
     } = await createIcrcCanister({ identity, canisterId: mapCanisterId(canisterId) });
 
-    await agent.fetchRootKey();
+    if (isTestnet()) await agent.fetchRootKey();
     return transferApi({
         to: {
             owner,
