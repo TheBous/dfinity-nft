@@ -1,7 +1,8 @@
 import { Identity } from '@dfinity/agent'
-import { decodeIcrcAccount } from '@dfinity/ledger-icrc'
 import { createIcrcCanister } from '../icrc1'
 import mapCanisterId from '../../mapCanisterId'
+import getSubAccountFromIdentity from './getSubAccountFromIdentity'
+import logWithTimestamp from '../../../date/logWithTimestamp'
 
 interface GetIcrc1Balance {
 	identity: Identity
@@ -15,15 +16,16 @@ const getIcrc1Balance = async ({
 	identity,
 	data: { ledgerCanisterId, certified = false },
 }: GetIcrc1Balance): Promise<bigint> => {
-	const principal = identity.getPrincipal().toText()
+	logWithTimestamp(`Get icrc balance...`)
+	const { account } = await getSubAccountFromIdentity(identity);
 	const { canister: { balance: getBalance } = {} } = await createIcrcCanister({
 		identity,
 		canisterId: mapCanisterId(ledgerCanisterId),
 	})
 
-	const account = decodeIcrcAccount(principal)
 	const balance = await getBalance({ certified, ...account })
 
+	logWithTimestamp(`Getting icrc balance complete.`)
 	return balance
 }
 

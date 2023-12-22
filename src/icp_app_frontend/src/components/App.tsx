@@ -4,17 +4,17 @@ import dfinity from '../../assets/images/dfinity.jpg'
 import { useAuth } from '../hooks/auth/useAuth'
 import getIcrc1Balance from '../utils/dfinity/icrc1/methods/getBalance'
 import executeIcrcTransfer from '../utils/dfinity/icrc1/methods/transfer'
-import { decodeIcrcAccount } from '@dfinity/ledger-icrc'
+import { decodeIcrcAccount, encodeIcrcAccount } from '@dfinity/ledger-icrc'
 import { transactionFee } from '../utils/dfinity/icrc1/methods/fees'
-import { principalToSubAccount } from '@dfinity/utils'
-import { SubAccount } from '@dfinity/ledger-icp'
 import getIcrc1IndexTransactions from '../utils/dfinity/icrc1_index/getIdentityTransactions'
+import { TransactionWithId } from '@dfinity/ledger-icrc/dist/candid/icrc_index'
 
 const App = () => {
 	const { identity, internetIdentitySync, internetIdentityLogin, internetIdentityLogout } = useAuth()
 	const [balance, setBalance] = useState(BigInt(0))
 	const [address, setAddress] = useState('')
 	const [amount, setAmount] = useState(BigInt(0))
+	const [txs, setTxs] = useState<Array<TransactionWithId>>([])
 
 	useEffect(() => {
 		internetIdentitySync()
@@ -22,14 +22,17 @@ const App = () => {
 	}, [])
 
 	useEffect(() => {
-		if (identity?.getPrincipal()) {
-			const subaccount = principalToSubAccount(identity?.getPrincipal())
-			const sub = SubAccount.fromBytes(subaccount)
-			console.warn(sub)
-		}
-	}, [identity])
-	useEffect(() => {
 		const getBalance = async () => {
+
+			const subaccount = new Uint8Array(32).fill(0);
+			subaccount[31] = 1;
+			const account = {
+				owner: identity.getPrincipal(),
+				subaccount: subaccount,
+			};
+			const subaccountString = encodeIcrcAccount(account);
+
+			console.warn('+++', subaccountString, txs);
 			const data = {
 				ledgerCanisterId: process.env.CANISTER_ID_THEBOUS,
 				certified: false,
@@ -55,8 +58,7 @@ const App = () => {
 					identity,
 					data,
 				})
-
-				console.log('here', _identityTransactions)
+				setTxs(_identityTransactions.transactions);
 			}
 		}
 
@@ -77,7 +79,7 @@ const App = () => {
 
 	const transfer = async () => {
 		try {
-			const fees = await transactionFee({ identity, certified: true, canisterId: process.env.CANISTER_ID_THEBOUS })
+			const fees = await transactionFee({ identity, certified: true, canisterId: process.env.CANISTER_ID_THEBOUS });
 			await executeIcrcTransfer({
 				identity,
 				canisterId: process.env.CANISTER_ID_THEBOUS,
@@ -93,7 +95,7 @@ const App = () => {
 	return (
 		<div className="w-screen h-screen flex justify-center items-center">
 			{!!identity && (
-				<div className="badge badge-primary absolute top-3 right-2 h-10">{identity?.getPrincipal()?.toText()}</div>
+				<div className="badge badge-primary absolute top-3 right-2 h-10">{identity.getPrincipal().toText()}</div>
 			)}
 			<div className="card w-96 bg-base-100 shadow-xl">
 				<figure>

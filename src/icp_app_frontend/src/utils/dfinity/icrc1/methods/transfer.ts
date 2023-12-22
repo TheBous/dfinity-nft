@@ -1,10 +1,10 @@
-import { IcrcAccount, IcrcBlockIndex } from '@dfinity/ledger-icrc'
+import { IcrcAccount, IcrcBlockIndex, decodeIcrcAccount } from '@dfinity/ledger-icrc'
 import { Identity } from '@dfinity/agent'
-import { arrayOfNumberToUint8Array, nonNullish, toNullable } from '@dfinity/utils'
+import { arrayOfNumberToUint8Array, nonNullish } from '@dfinity/utils'
 import nowInBigIntNanoSeconds from '../../../date/nowInBigIntNanoSeconds'
 import { createIcrcCanister } from '../icrc1'
 import mapCanisterId from '../../mapCanisterId'
-import isTestnet from '../../utils/isTestnet'
+import getSubAccountFromIdentity from './getSubAccountFromIdentity'
 
 export type SubAccountArray = Array<number>
 export interface IcrcTransferParams {
@@ -26,19 +26,19 @@ export const executeIcrcTransfer = async ({
 	createdAt,
 	...rest
 }: IcrcTransferParams): Promise<IcrcBlockIndex> => {
-	const {
-		agent,
-		canister: { transfer: transferApi },
-	} = await createIcrcCanister({ identity, canisterId: mapCanisterId(canisterId) })
+	const { canister: { transfer: transferApi } } = await createIcrcCanister({ identity, canisterId: mapCanisterId(canisterId) });
+	const chosenFromSubAccount = nonNullish(fromSubAccount) ? arrayOfNumberToUint8Array(fromSubAccount) : (await getSubAccountFromIdentity(identity))?.account?.subaccount;
 
-	if (isTestnet()) await agent.fetchRootKey()
+	const chosenToSubAccount = nonNullish(subaccount) ? subaccount : new Uint8Array(Array(32).fill(0));
+	const chosenTo = decodeIcrcAccount(`${owner}.${chosenToSubAccount}`);
+
 	return transferApi({
 		to: {
-			owner,
-			subaccount: toNullable(subaccount),
+			owner: chosenTo.owner,
+			subaccount: [chosenTo.subaccount],
 		},
 		created_at_time: createdAt ?? nowInBigIntNanoSeconds(),
-		from_subaccount: nonNullish(fromSubAccount) ? arrayOfNumberToUint8Array(fromSubAccount) : undefined,
+		from_subaccount: chosenFromSubAccount,
 		...rest,
 	})
 }

@@ -2,7 +2,7 @@ import { Identity } from '@dfinity/agent'
 import { create } from 'zustand'
 
 export interface AuthStoreData {
-	identity: Identity | undefined | null
+	identity: Identity | undefined | null;
 	setIdentity: (identity: Identity | undefined | null) => void
 }
 
