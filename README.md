@@ -135,61 +135,91 @@ dfx ledger account-id
 Step-by-Step Guide
 
 1. Purchase ICP on an Exchange
-Acquire ICP tokens through a supported exchange platform.
+   Acquire ICP tokens through a supported exchange platform.
 
 2. Discover Your Account ID
-Use the following command to find your account ID:
+   Use the following command to find your account ID:
 
 ```bash
 dfx ledger account-id
 ```
 
 3. Transfer ICP to Your Account
-Transfer ICP from the exchange to your account using the account ID obtained in the previous step.
+   Transfer ICP from the exchange to your account using the account ID obtained in the previous step.
 
 4. Confirm Transfer
-Verify the successful transfer by checking the balance:
+   Verify the successful transfer by checking the balance:
 
 ```bash
 dfx ledger --network ic balance
 ```
 
 5. Find Your Principal Identifier
-Discover your principal identifier using the following command:
+   Discover your principal identifier using the following command:
 
 ```bash
 dfx identity get-principal
 ```
 
 6. Convert ICP to Cycles
-Execute the conversion command, replacing <your-principal-identifier> and <icp-tokens>:
+   Execute the conversion command, replacing <your-principal-identifier> and <icp-tokens>:
 
 ```bash
 dfx ledger --network ic create-canister <your-principal-identifier> --amount <icp-tokens>
 ```
 
 7. Record Canister ID
-Take note of the returned canister ID.
+   Take note of the returned canister ID.
 
 8. Deploy Wallet Canister
-Deploy a wallet canister using the canister ID obtained in the previous step:
+   Deploy a wallet canister using the canister ID obtained in the previous step:
 
 ```bash
 dfx identity --network ic deploy-wallet <canister-identifier>
 ```
 
 9. Discover Your Wallet
-Find your wallet using the following command:
+   Find your wallet using the following command:
 
 ```bash
 dfx identity --network ic get-wallet
 ```
 
 10. Verify Conversion
-Ensure the conversion was successful by checking the wallet balance:
+    Ensure the conversion was successful by checking the wallet balance:
 
 ```bash
 dfx wallet --network ic balance
 ```
 
-Conclusion
+## Deploy
+
+Set Principal for ICRC1 Canister Deployment:
+
+Run the following command to export the principal for the ICRC1 canister deployment:
+bash
+Copy code
+export PRINCIPAL=$(dfx identity get-principal)
+This ensures that the subsequent script knows which principal to use.
+
+Run ICRC1 Canister Deployment Script:
+
+Execute the script deploy_icrc1.sh located in the "scripts" folder.
+Successful Deployment of ICRC1 Canister:
+
+You have now deployed the ICRC1 canister.
+Deploy ICRC1_Index Canister for Transaction List:
+
+Obtain the canister ID of the recently deployed ICRC1 canister.
+Navigate to the script deploy_icrc1_index.sh and replace the canister ID with the obtained value.
+Run the script.
+Successful Deployment of ICRC1_Index Canister:
+
+You have now deployed the ICRC1_Index canister for managing the transaction list.
+Deploy the Frontend:
+
+Execute the command below to deploy the frontend:
+bash
+Copy code
+dfx deploy --network="ic"
+Congratulations! You have successfully deployed the ICRC1 canister, its corresponding transaction list canister (ICRC1_Index), and the frontend on the Internet Computer network.

@@ -1,7 +1,7 @@
-dfx canister --network local call thebous icrc1_transfer '
+dfx canister --network ic call thebous icrc1_transfer '
   (record {
     to=(record {
-      owner=(principal "ml6ci-6ntwf-itf2z-c354m-ipd2p-xm62m-fzxtk-xiyqf-g3jvx-wxm47-2qe")
+      owner=(principal "b53ip-bdbzc-vzpjg-bh4qc-tbxyb-ijgmm-syldq-gcxqh-ptpyt-fwua2-zae")
     });
     amount=1_000_000
   })

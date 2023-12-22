@@ -1,13 +1,11 @@
 {
-	"icp_app_backend": {
-		"ic": "h2wkq-diaaa-aaaap-qb5la-cai",
-		"local": "h2wkq-diaaa-aaaap-qb5la-cai"
-	},
 	"icp_app_frontend": {
-		"ic": "h5xme-oqaaa-aaaap-qb5lq-cai",
-		"local": "h5xme-oqaaa-aaaap-qb5lq-cai"
+		"ic": "xvvyo-faaaa-aaaak-qcxva-cai"
 	},
 	"thebous": {
-		"ic": "gm5s3-wyaaa-aaaap-qb5oa-cai"
+		"ic": "wwzri-ryaaa-aaaak-qcxtq-cai"
+	},
+	"thebous_index": {
+		"ic": "x4wts-tiaaa-aaaak-qcxuq-cai"
 	}
 }
