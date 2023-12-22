@@ -9,12 +9,17 @@ import { transactionFee } from '../utils/dfinity/icrc1/methods/fees'
 import { principalToSubAccount } from '@dfinity/utils'
 import { SubAccount } from '@dfinity/ledger-icp'
 import getIcrc1IndexTransactions from '../utils/dfinity/icrc1_index/getIdentityTransactions'
+import { TransactionWithId } from '@dfinity/ledger-icrc/dist/candid/icrc_index'
+import convertNanoSecondsToDate from '../utils/date/convertNanoSecondsToDate'
+import humanReadableDate from '../utils/date/humanReadableDate'
 
 const App = () => {
 	const { identity, internetIdentitySync, internetIdentityLogin, internetIdentityLogout } = useAuth()
 	const [balance, setBalance] = useState(BigInt(0))
 	const [address, setAddress] = useState('')
 	const [amount, setAmount] = useState(BigInt(0))
+	const [txs, setTxs] = useState<TransactionWithId[]>([])
+	const [isAccordionOpened, setIsAccordionOpened] = useState(false)
 
 	useEffect(() => {
 		internetIdentitySync()
@@ -57,6 +62,7 @@ const App = () => {
 				})
 
 				console.log('here', _identityTransactions)
+				setTxs(_identityTransactions.transactions);
 			}
 		}
 
@@ -91,7 +97,7 @@ const App = () => {
 	}
 
 	return (
-		<div className="w-screen h-screen flex justify-center items-center">
+		<div className="w-screen h-screen flex flex-col justify-center items-center">
 			{!!identity && (
 				<div className="badge badge-primary absolute top-3 right-2 h-10">{identity?.getPrincipal()?.toText()}</div>
 			)}
@@ -108,7 +114,7 @@ const App = () => {
 					{!!identity && (
 						<p>
 							<span>thebous amount: </span>
-							<span className="text-red-400">{balance.toString()}</span>
+							<span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-300 to-purple-900">{balance.toString()}</span>
 							<span> THB</span>
 						</p>
 					)}
@@ -136,6 +142,23 @@ const App = () => {
 							</div>
 						)}
 					</div>
+				</div>
+			</div>
+			<div className="collapse collapse-arrow bg-base-200 w-96" onClick={() => setIsAccordionOpened(!isAccordionOpened)}>
+				<input type="radio" name="my-accordion-2" checked={isAccordionOpened} />
+				<div className="collapse-title text-xl font-medium">
+					Transactions
+				</div>
+				<div className="collapse-content">
+					{txs.map((tx) => {
+						return (
+							<div key={tx.id}>
+								<span className='text-lg text-transparent bg-clip-text bg-gradient-to-r from-orange-300 to-purple-900'>{tx.transaction.kind}</span>
+								<p className='text-sm'>{humanReadableDate(convertNanoSecondsToDate(tx.transaction.timestamp))}</p>
+							</div>
+
+						);
+					})}
 				</div>
 			</div>
 			<dialog id="send_modal" className="modal">
