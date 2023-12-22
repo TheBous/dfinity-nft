@@ -5,10 +5,10 @@ This repository provides a boilerplate for developing decentralized applications
 
 ## Features
 
-- *React*: A popular JavaScript library for building user interfaces.
-- *Dfinity*: Integration with the Internet Computer for decentralized application development.
-- *dfx*: The Dfinity command-line tool for managing canister deployments and interactions.
-- *Canister* API: Pre-configured setup to connect and interact with Dfinity canisters from React.
+- _React_: A popular JavaScript library for building user interfaces.
+- _Dfinity_: Integration with the Internet Computer for decentralized application development.
+- _dfx_: The Dfinity command-line tool for managing canister deployments and interactions.
+- _Canister_ API: Pre-configured setup to connect and interact with Dfinity canisters from React.
 
 ### Getting Started
 
@@ -19,25 +19,30 @@ git clone https://github.com/your-username/react-dfinity-canister-boilerplate.gi
 ```
 
 Install dependencies:
+
 ```bash
 cd react-dfinity-canister-boilerplate
 npm install
 ```
 
 Start the Dfinity environment:
+
 ```bash
 dfx start
 ```
 
 Deploy the canisters:
+
 ```bash
 dfx deploy
 ```
 
 Run the React application:
+
 ```bash
 npm start
 ```
+
 Open your Dapp:
 
 Visit http://localhost:8080 in your browser.
@@ -45,4 +50,5 @@ Visit http://localhost:8080 in your browser.
 Thanks to the Dfinity and React communities for their excellent tools and documentation.
 
 ### Contact
+
 TheBous - @the_bous - thebous1993@gmail.com

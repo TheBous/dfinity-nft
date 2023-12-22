@@ -8,6 +8,7 @@ import { decodeIcrcAccount } from '@dfinity/ledger-icrc'
 import { transactionFee } from '../utils/dfinity/icrc1/methods/fees'
 import { principalToSubAccount } from '@dfinity/utils'
 import { SubAccount } from '@dfinity/ledger-icp'
+import getIcrc1IndexTransactions from '../utils/dfinity/icrc1_index/getIdentityTransactions'
 
 const App = () => {
 	const { identity, internetIdentitySync, internetIdentityLogin, internetIdentityLogout } = useAuth()
@@ -15,10 +16,11 @@ const App = () => {
 	const [address, setAddress] = useState('')
 	const [amount, setAmount] = useState(BigInt(0))
 
-	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => {
 		internetIdentitySync()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
+
 	useEffect(() => {
 		if (identity?.getPrincipal()) {
 			const subaccount = principalToSubAccount(identity?.getPrincipal())
@@ -40,6 +42,25 @@ const App = () => {
 		}
 
 		if (identity) getBalance()
+	}, [identity])
+
+	useEffect(() => {
+		const getTxs = async () => {
+			if (identity?.getPrincipal()) {
+				const data = {
+					ledgerCanisterId: process.env.CANISTER_ID_THEBOUS_INDEX,
+					maxResults: BigInt(2),
+				}
+				const _identityTransactions = await getIcrc1IndexTransactions({
+					identity,
+					data,
+				})
+
+				console.log('here', _identityTransactions)
+			}
+		}
+
+		getTxs()
 	}, [identity])
 
 	const showSendModal = () => {

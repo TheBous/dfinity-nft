@@ -1,8 +1,8 @@
 dfx canister --network local call thebous icrc1_transfer '
   (record {
     to=(record {
-      owner=(principal "v5mav-3nfum-ucfol-4lpoo-eqxqb-m65e6-xtkcs-zcyi5-cewpa-hixr7-vqe")
+      owner=(principal "ml6ci-6ntwf-itf2z-c354m-ipd2p-xm62m-fzxtk-xiyqf-g3jvx-wxm47-2qe")
     });
-    amount=100_000
+    amount=1_000_000
   })
 '
