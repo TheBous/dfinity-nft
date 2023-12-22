@@ -63,17 +63,9 @@ Command: dfx ledger account-id
 
 
 ## Obtain cycles
-Purchase ICP on an exchange.
-Discover your account ID on DFINITY Canister SDK (dfx) using the command: dfx ledger account-id.
-Transfer ICP to your account ID from the exchange.
-Confirm the transfer by checking the balance with the command: dfx ledger --network ic balance.
-Find your principal identifier using the command: dfx identity get-principal.
-Convert ICP to cycles using the following command, replacing <your-principal-identifier> and <icp-tokens> with your principal identifier and ICP value: dfx ledger --network ic create-canister <your-principal-identifier> --amount <icp-tokens>.
-Take note of the returned canister ID and use it in the next command to create a wallet canister.
-Deploy a wallet canister using the command: dfx identity --network ic deploy-wallet <canister-identifier>.
-Discover your wallet using the following command: dfx identity --network ic get-wallet.
-Verify the success of the conversion by checking the wallet balance with the command: dfx wallet --network ic balance.
+
 Step-by-Step Guide
+
 1. Purchase ICP on an Exchange
 Acquire ICP tokens through a supported exchange platform.
 
