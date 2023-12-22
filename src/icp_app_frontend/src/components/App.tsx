@@ -6,8 +6,6 @@ import getIcrc1Balance from '../utils/dfinity/icrc1/methods/getBalance'
 import executeIcrcTransfer from '../utils/dfinity/icrc1/methods/transfer'
 import { decodeIcrcAccount } from '@dfinity/ledger-icrc'
 import { transactionFee } from '../utils/dfinity/icrc1/methods/fees'
-import { principalToSubAccount } from '@dfinity/utils'
-import { SubAccount } from '@dfinity/ledger-icp'
 import getIcrc1IndexTransactions from '../utils/dfinity/icrc1_index/getIdentityTransactions'
 import { TransactionWithId } from '@dfinity/ledger-icrc/dist/candid/icrc_index'
 import convertNanoSecondsToDate from '../utils/date/convertNanoSecondsToDate'
@@ -26,13 +24,6 @@ const App = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	useEffect(() => {
-		if (identity?.getPrincipal()) {
-			const subaccount = principalToSubAccount(identity?.getPrincipal())
-			const sub = SubAccount.fromBytes(subaccount)
-			console.warn(sub)
-		}
-	}, [identity])
 	useEffect(() => {
 		const getBalance = async () => {
 			const data = {
@@ -144,7 +135,7 @@ const App = () => {
 					</div>
 				</div>
 			</div>
-			<div className="collapse collapse-arrow bg-base-200 w-96" onClick={() => setIsAccordionOpened(!isAccordionOpened)}>
+			{!!identity && <div className="collapse collapse-arrow bg-base-200 w-96" onClick={() => setIsAccordionOpened(!isAccordionOpened)}>
 				<input type="radio" name="my-accordion-2" checked={isAccordionOpened} />
 				<div className="collapse-title text-xl font-medium">
 					Transactions
@@ -160,7 +151,7 @@ const App = () => {
 						);
 					})}
 				</div>
-			</div>
+			</div>}
 			<dialog id="send_modal" className="modal">
 				<div className="modal-box">
 					<h3 className="font-bold text-lg">Send</h3>
