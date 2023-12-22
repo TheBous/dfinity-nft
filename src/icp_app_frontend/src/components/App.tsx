@@ -53,7 +53,7 @@ const App = () => {
 				})
 
 				console.log('here', _identityTransactions)
-				setTxs(_identityTransactions.transactions);
+				setTxs(_identityTransactions.transactions)
 			}
 		}
 
@@ -105,7 +105,9 @@ const App = () => {
 					{!!identity && (
 						<p>
 							<span>thebous amount: </span>
-							<span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-300 to-purple-900">{balance.toString()}</span>
+							<span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-300 to-purple-900">
+								{balance.toString()}
+							</span>
 							<span> THB</span>
 						</p>
 					)}
@@ -135,23 +137,27 @@ const App = () => {
 					</div>
 				</div>
 			</div>
-			{!!identity && <div className="collapse collapse-arrow bg-base-200 w-96" onClick={() => setIsAccordionOpened(!isAccordionOpened)}>
-				<input type="radio" name="my-accordion-2" checked={isAccordionOpened} />
-				<div className="collapse-title text-xl font-medium">
-					Transactions
+			{!!identity && (
+				<div
+					className="collapse collapse-arrow bg-base-200 w-96"
+					onClick={() => setIsAccordionOpened(!isAccordionOpened)}
+				>
+					<input type="radio" name="my-accordion-2" checked={isAccordionOpened} />
+					<div className="collapse-title text-xl font-medium">Transactions</div>
+					<div className="collapse-content">
+						{txs.map(tx => {
+							return (
+								<div key={tx.id}>
+									<span className="text-lg text-transparent bg-clip-text bg-gradient-to-r from-orange-300 to-purple-900">
+										{tx.transaction.kind}
+									</span>
+									<p className="text-sm">{humanReadableDate(convertNanoSecondsToDate(tx.transaction.timestamp))}</p>
+								</div>
+							)
+						})}
+					</div>
 				</div>
-				<div className="collapse-content">
-					{txs.map((tx) => {
-						return (
-							<div key={tx.id}>
-								<span className='text-lg text-transparent bg-clip-text bg-gradient-to-r from-orange-300 to-purple-900'>{tx.transaction.kind}</span>
-								<p className='text-sm'>{humanReadableDate(convertNanoSecondsToDate(tx.transaction.timestamp))}</p>
-							</div>
-
-						);
-					})}
-				</div>
-			</div>}
+			)}
 			<dialog id="send_modal" className="modal">
 				<div className="modal-box">
 					<h3 className="font-bold text-lg">Send</h3>
