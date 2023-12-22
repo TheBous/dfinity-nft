@@ -1,54 +1,62 @@
-# React Dfinity Canister Dapp Boilerplate
+# Commands
 
-React Dfinity Canister Dapp Boilerplate
-This repository provides a boilerplate for developing decentralized applications (DApps) on the Internet Computer (IC) using React and Dfinity canisters. This boilerplate is designed to jumpstart your development process by providing a structured project setup and integrating essential tools for building powerful and secure decentralized applications.
+deploy:ic
 
-## Features
+Description: Deploys the specified canister to the Internet Computer network.
+Command: dfx deploy --network=ic
+generate
 
-- _React_: A popular JavaScript library for building user interfaces.
-- _Dfinity_: Integration with the Internet Computer for decentralized application development.
-- _dfx_: The Dfinity command-line tool for managing canister deployments and interactions.
-- _Canister_ API: Pre-configured setup to connect and interact with Dfinity canisters from React.
+Description: Generates necessary files for the specified canister.
+Command: dfx generate $canister
+canister:status
 
-### Getting Started
+Description: Displays the status of all canisters.
+Command: dfx canister status --all
+canister:stop:all
 
-Clone the repository:
+Description: Stops all running canisters.
+Command: dfx canister stop --all
+canister:delete:all
 
-```bash
-git clone https://github.com/your-username/react-dfinity-canister-boilerplate.git
-```
+Description: Deletes all canisters.
+Command: dfx canister delete --all
+canister:deploy
 
-Install dependencies:
+Description: Deploys all canisters.
+Command: dfx deploy
+start:ic
 
-```bash
-cd react-dfinity-canister-boilerplate
-npm install
-```
+Description: Starts the Internet Computer development environment in the background with cleanup.
+Command: dfx start --background --clean
+prepare
 
-Start the Dfinity environment:
+Description: Installs Husky, a tool for Git hooking.
+Command: husky install
+deploy:prod
 
-```bash
-dfx start
-```
+Description: Creates, builds, and installs the canister on the Internet Computer network.
+Command: dfx canister --network ic create $canister && dfx build --network ic $canister && dfx canister --network ic install $canister
+deploy:prod:with:cycles
 
-Deploy the canisters:
+Description: Creates the canister on the Internet Computer network with a specified number of cycles.
+Command: dfx canister --network ic create $canister --with-cycles 1000000000000
+update:install:frontend
 
-```bash
-dfx deploy
-```
+Description: Builds and reinstalls the canister on the Internet Computer network with a reinstallation mode.
+Command: dfx build --network ic $canister && dfx canister --network ic install $canister --mode reinstall
+deploy:icrc1
 
-Run the React application:
+Description: Executes an external script for deploying the canister on the ICRC1 network.
+Command: PRINCIPAL=$(dfx identity get-principal) bash ./scripts/deploy_icrc1.sh
+deploy:icrc1:index
 
-```bash
-npm start
-```
+Description: Executes an external script for deploying the index on the ICRC1 network.
+Command: bash ./scripts/deploy_icrc1_index.sh
+mint:to:owner
 
-Open your Dapp:
+Description: Executes an external script for creating new tokens.
+Command: bash ./scripts/mint.sh
+view:account:id
 
-Visit http://localhost:8080 in your browser.
-
-Thanks to the Dfinity and React communities for their excellent tools and documentation.
-
-### Contact
-
-TheBous - @the_bous - thebous1993@gmail.com
+Description: Displays the account ID in the Internet Computer development environment.
+Command: dfx ledger account-id

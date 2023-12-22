@@ -38,7 +38,8 @@
 		"update:install:frontend": "dfx build --network ic $canister && dfx canister --network ic install $canister --mode reinstall",
 		"deploy:icrc1": "PRINCIPAL=$(dfx identity get-principal) bash ./scripts/deploy_icrc1.sh",
 		"deploy:icrc1:index": "bash ./scripts/deploy_icrc1_index.sh",
-		"mint:to:owner": "bash ./scripts/mint.sh"
+		"mint:to:owner": "bash ./scripts/mint.sh",
+		"view:account:id": "dfx ledger account-id"
 	},
 	"dependencies": {
 		"@dfinity/agent": "^0.20.2",
