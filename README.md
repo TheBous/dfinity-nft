@@ -369,10 +369,6 @@ dfx  wallet  --network  ic  balance
  2. Run the following command to export the principal for the ICRC1 canister deployment:
 
         export PRINCIPAL=$(dfx identity get-principal)
-        
-
-
-This ensures that the subsequent script knows which principal to use.
  4. This ensures that the subsequent script knows which principal to use.
  5. Execute the script deploy_icrc1.sh located in the "scripts" folder.
  6. You have now deployed the ICRC1 canister.
