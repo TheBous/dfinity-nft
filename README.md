@@ -1,5 +1,8 @@
+<!-- ⚠️ This README has been generated from the file(s) "blueprint.md" ⚠️-->
 
-# Commands
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#commands)
+
+# ➤ Commands
 
   
 
@@ -237,7 +240,10 @@ dfx  ledger  account-id
 
   
 
-## Obtain cycles
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#obtain-cycles)
+
+## ➤ Obtain cycles
 
   
 
@@ -361,7 +367,10 @@ dfx  wallet  --network  ic  balance
 
   
 
-## Deploy
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#deploy)
+
+## ➤ Deploy
 
   
 
