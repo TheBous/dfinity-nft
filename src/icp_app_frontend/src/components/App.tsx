@@ -10,6 +10,7 @@ import getIcrc1IndexTransactions from '../utils/dfinity/icrc1_index/getIdentityT
 import { TransactionWithId } from '@dfinity/ledger-icrc/dist/candid/icrc_index'
 import convertNanoSecondsToDate from '../utils/date/convertNanoSecondsToDate'
 import humanReadableDate from '../utils/date/humanReadableDate'
+import useBalanceWorker from '../hooks/worker/useBalanceWorker'
 
 const App = () => {
 	const { identity, internetIdentitySync, internetIdentityLogin, internetIdentityLogout } = useAuth()
@@ -18,6 +19,21 @@ const App = () => {
 	const [amount, setAmount] = useState(BigInt(0))
 	const [txs, setTxs] = useState<TransactionWithId[]>([])
 	const [isAccordionOpened, setIsAccordionOpened] = useState(false)
+
+	const { startBalancesTimer, stopBalancesTimer } = useBalanceWorker()
+
+	useEffect(() => {
+		startBalancesTimer({
+			ledgerCanisterId: process.env.CANISTER_ID_THEBOUS,
+			accountIdentifier: identity?.getPrincipal()?.toString(),
+			callback: data => setBalance(data.balance),
+			certified: false,
+			host: 'http://localhost:8080' || 'canister',
+		})
+
+		return () => stopBalancesTimer()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [identity?.getPrincipal()?.toString()])
 
 	useEffect(() => {
 		internetIdentitySync()
