@@ -2,25 +2,18 @@ import React, { useEffect, useState } from 'react'
 import QRCode from 'react-qr-code'
 import dfinity from '../../assets/images/dfinity.jpg'
 import { useAuth } from '../hooks/auth/useAuth'
-import getIcrc1Balance from '../utils/dfinity/icrc1/methods/getBalance'
 import executeIcrcTransfer from '../utils/dfinity/icrc1/methods/transfer'
 import { decodeIcrcAccount } from '@dfinity/ledger-icrc'
 import { transactionFee } from '../utils/dfinity/icrc1/methods/fees'
-import getIcrc1IndexTransactions from '../utils/dfinity/icrc1_index/getIdentityTransactions'
-import { TransactionWithId } from '@dfinity/ledger-icrc/dist/candid/icrc_index'
-import convertNanoSecondsToDate from '../utils/date/convertNanoSecondsToDate'
-import humanReadableDate from '../utils/date/humanReadableDate'
 import useBalanceWorker from '../hooks/worker/useBalanceWorker'
+import Transactions from './transactions/Transactions'
 
 const App = () => {
 	const { identity, internetIdentitySync, internetIdentityLogin, internetIdentityLogout } = useAuth()
-	const [balance, setBalance] = useState(BigInt(0))
 	const [address, setAddress] = useState('')
 	const [amount, setAmount] = useState(BigInt(0))
-	const [txs, setTxs] = useState<TransactionWithId[]>([])
-	const [isAccordionOpened, setIsAccordionOpened] = useState(false)
 
-	const { startBalancesTimer, stopBalancesTimer } = useBalanceWorker()
+	const { startBalancesTimer, stopBalancesTimer, balance, setBalance } = useBalanceWorker(true)
 
 	useEffect(() => {
 		startBalancesTimer({
@@ -39,42 +32,6 @@ const App = () => {
 		internetIdentitySync()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
-
-	useEffect(() => {
-		const getBalance = async () => {
-			const data = {
-				ledgerCanisterId: process.env.CANISTER_ID_THEBOUS,
-				certified: false,
-			}
-			const _balance = await getIcrc1Balance({
-				identity,
-				data,
-			})
-			setBalance(_balance)
-		}
-
-		if (identity) getBalance()
-	}, [identity])
-
-	useEffect(() => {
-		const getTxs = async () => {
-			if (identity?.getPrincipal()) {
-				const data = {
-					ledgerCanisterId: process.env.CANISTER_ID_THEBOUS_INDEX,
-					maxResults: BigInt(2),
-				}
-				const _identityTransactions = await getIcrc1IndexTransactions({
-					identity,
-					data,
-				})
-
-				console.log('here', _identityTransactions)
-				setTxs(_identityTransactions.transactions)
-			}
-		}
-
-		getTxs()
-	}, [identity])
 
 	const showSendModal = () => {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -153,27 +110,7 @@ const App = () => {
 					</div>
 				</div>
 			</div>
-			{!!identity && (
-				<div
-					className="collapse collapse-arrow bg-base-200 w-96"
-					onClick={() => setIsAccordionOpened(!isAccordionOpened)}
-				>
-					<input type="radio" name="my-accordion-2" checked={isAccordionOpened} />
-					<div className="collapse-title text-xl font-medium">Transactions</div>
-					<div className="collapse-content">
-						{txs.map(tx => {
-							return (
-								<div key={tx.id}>
-									<span className="text-lg text-transparent bg-clip-text bg-gradient-to-r from-orange-300 to-purple-900">
-										{tx.transaction.kind}
-									</span>
-									<p className="text-sm">{humanReadableDate(convertNanoSecondsToDate(tx.transaction.timestamp))}</p>
-								</div>
-							)
-						})}
-					</div>
-				</div>
-			)}
+			<Transactions />
 			<dialog id="send_modal" className="modal">
 				<div className="modal-box">
 					<h3 className="font-bold text-lg">Send</h3>

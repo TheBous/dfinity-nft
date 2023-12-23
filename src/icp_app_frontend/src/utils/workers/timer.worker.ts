@@ -96,7 +96,7 @@ export class TimerWorker {
 	private setStatus(state: SyncState) {
 		this.timerStatus = state
 		postMessage({
-			msg: 'nnsSyncStatus',
+			msg: 'syncStatus',
 			data: {
 				state,
 			},

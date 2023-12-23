@@ -4,14 +4,36 @@ import type {
 	PostMessageDataResponseBalance,
 } from '../../types/workers/post-message.balances'
 import type { PostMessageDataResponseSync } from '../../types/workers/post-message.sync'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useAuth } from '../auth/useAuth'
+import getIcrc1Balance from '../../utils/dfinity/icrc1/methods/getBalance'
 
 export type BalancesCallback = (data: PostMessageDataResponseBalance) => void
 
 const balanceWorker = new Worker(new URL('../../workers/balance/balance.worker', import.meta.url))
 let balanceCallback: BalancesCallback | undefined
 
-const useBalanceWorker = () => {
+const useBalanceWorker = (initialFetch = false) => {
+	const { identity } = useAuth();
+	const [balance, setBalance] = useState(BigInt(0));
+
+	useEffect(() => {
+		const getBalance = async () => {
+			const data = {
+				ledgerCanisterId: process.env.CANISTER_ID_THEBOUS,
+				certified: false,
+			}
+			const _balance = await getIcrc1Balance({
+				identity,
+				data,
+			})
+			setBalance(_balance)
+		}
+
+		if (identity && initialFetch) getBalance()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [identity]);
+
 	useEffect(() => {
 		balanceWorker.onmessage = async ({
 			data,
@@ -19,14 +41,14 @@ const useBalanceWorker = () => {
 			const { msg } = data
 
 			switch (msg) {
-				case 'nnsSyncBalances':
+				case 'syncBalance':
 					balanceCallback?.(data.data as PostMessageDataResponseBalance)
 					return
-				case 'nnsSyncStatus':
-					console.warn('nnsSyncStatus')
+				case 'syncStatus':
+					console.warn('syncStatus')
 					return
-				case 'nnsSyncErrorBalances':
-					console.warn('nnsSyncErrorBalances')
+				case 'syncErrorBalance':
+					console.warn('syncErrorBalance')
 					return
 			}
 		}
@@ -53,6 +75,8 @@ const useBalanceWorker = () => {
 				msg: 'nnsStopBalancesTimer',
 			})
 		},
+		balance,
+		setBalance
 	}
 }
 

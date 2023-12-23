@@ -17,9 +17,9 @@ export type PostMessageResponse =
 	| 'nnsDelegationRemainingTime'
 	| 'nnsSyncTransactions'
 	| 'nnsSyncErrorTransactions'
-	| 'nnsSyncBalances'
-	| 'nnsSyncErrorBalances'
-	| 'nnsSyncStatus'
+	| 'syncBalance'
+	| 'syncErrorBalance'
+	| 'syncStatus'
 
 export interface PostMessage<T extends PostMessageData> {
 	msg: PostMessageRequest | PostMessageResponse

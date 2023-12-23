@@ -22,7 +22,7 @@ const emitBalances = (postMessageResponse: PostMessageDataResponseBalance) => {
 	const data: PostMessageDataResponseBalance = { ...postMessageResponse }
 
 	worker.postMsg({
-		msg: 'nnsSyncBalances',
+		msg: 'syncBalance',
 		data,
 	})
 }
@@ -36,7 +36,7 @@ const syncBalances = async (params: TimerWorkerUtilsJobData<PostMessageDataReque
 		emitBalances({ accountIdentifier: params.identity.getPrincipal().toString(), balance: queries })
 	} catch (err: unknown) {
 		worker.postMsg({
-			msg: 'nnsSyncErrorBalances',
+			msg: 'syncErrorBalance',
 			data: err,
 		})
 
