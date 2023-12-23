@@ -33,10 +33,7 @@ const useWebWorker = (workerScript: URL) => {
 	}, [])
 
 	const postMessageToWorker = (message: WorkerMessage) => {
-		if (workerRef.current) {
-			console.warn('post', message)
-			workerRef.current.postMessage(message)
-		}
+		if (workerRef.current) workerRef.current.postMessage(message)
 	}
 
 	return { worker, messageFromWorker, postMessageToWorker }
