@@ -289,7 +289,6 @@ dfx  wallet  --network  ic  balance
 12. Deploy the Frontend:
 13. Execute the command below to deploy the frontend:
 
-
     dfx deploy --network="ic"
 
 Congratulations! You have successfully deployed the ICRC1 canister, its corresponding transaction list canister (ICRC1_Index), and the frontend on the Internet Computer network.

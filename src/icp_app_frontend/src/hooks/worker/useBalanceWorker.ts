@@ -14,8 +14,8 @@ const balanceWorker = new Worker(new URL('../../workers/balance/balance.worker',
 let balanceCallback: BalancesCallback | undefined
 
 const useBalanceWorker = (initialFetch = false) => {
-	const { identity } = useAuth();
-	const [balance, setBalance] = useState(BigInt(0));
+	const { identity } = useAuth()
+	const [balance, setBalance] = useState(BigInt(0))
 
 	useEffect(() => {
 		const getBalance = async () => {
@@ -32,7 +32,7 @@ const useBalanceWorker = (initialFetch = false) => {
 
 		if (identity && initialFetch) getBalance()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [identity]);
+	}, [identity])
 
 	useEffect(() => {
 		balanceWorker.onmessage = async ({
@@ -76,7 +76,7 @@ const useBalanceWorker = (initialFetch = false) => {
 			})
 		},
 		balance,
-		setBalance
+		setBalance,
 	}
 }
 
