@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import QRCode from 'react-qr-code'
 import dfinity from '../../assets/images/dfinity.jpg'
 import { useAuth } from '../hooks/auth/useAuth'
@@ -18,7 +18,10 @@ const App = () => {
 	const [amount, setAmount] = useState(BigInt(0))
 
 	const { startBalancesTimer, stopBalancesTimer, balance, setBalance } = useBalanceWorker(true)
-	const { syncAuthIdle } = useAuthWorker()
+	const { syncAuthIdle } = useAuthWorker();
+
+	const sendModal = useRef(null);
+	const receiveModal = useRef(null);
 
 	useEffect(() => {
 		syncAuthIdle(identity?.getPrincipal()?.toString())
@@ -46,17 +49,8 @@ const App = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	const showSendModal = () => {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		document.getElementById('send_modal').showModal()
-	}
-
-	const showReceiveModal = () => {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		document.getElementById('receive_modal').showModal()
-	}
+	const showSendModal = () => sendModal.current.showModal();
+	const showReceiveModal = () => receiveModal.current.showModal();
 
 	const transfer = async () => {
 		try {
@@ -127,7 +121,7 @@ const App = () => {
 				</div>
 			</div>
 			<Transactions />
-			<dialog id="send_modal" className="modal">
+			<dialog id="send_modal" className="modal" ref={sendModal}>
 				<div className="modal-box">
 					<h3 className="font-bold text-lg">Send</h3>
 					<p className="py-4">Insert the amount you wanna send!</p>
@@ -153,7 +147,7 @@ const App = () => {
 					</div>
 				</div>
 			</dialog>
-			<dialog id="receive_modal" className="modal">
+			<dialog id="receive_modal" className="modal" ref={receiveModal}>
 				<div className="modal-box">
 					<h3 className="font-bold text-lg">Receive</h3>
 					<span>{identity?.getPrincipal()?.toText()}</span>
