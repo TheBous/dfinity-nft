@@ -10,17 +10,18 @@ import Transactions from './transactions/Transactions'
 import useAuthWorker from '../hooks/worker/useAuthWorker'
 import isTestnet from '../utils/dfinity/utils/isTestnet'
 import { PostMessageDataRequestBalance } from '../types/workers/post-message.balances'
+import ThemeSwitcher from './dark-mode/ThemeSwitcher'
 
 const App = () => {
 	const { identity, internetIdentitySync, internetIdentityLogin, internetIdentityLogout } = useAuth()
 	const [address, setAddress] = useState('')
 	const [amount, setAmount] = useState(BigInt(0))
 
-	const { startBalancesTimer, stopBalancesTimer, balance, setBalance } = useBalanceWorker(true);
-	const { syncAuthIdle } = useAuthWorker();
+	const { startBalancesTimer, stopBalancesTimer, balance, setBalance } = useBalanceWorker(true)
+	const { syncAuthIdle } = useAuthWorker()
 
 	useEffect(() => {
-		syncAuthIdle(identity?.getPrincipal()?.toString());
+		syncAuthIdle(identity?.getPrincipal()?.toString())
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [identity?.getPrincipal()?.toString()])
 
@@ -33,7 +34,7 @@ const App = () => {
 			callback: data => setBalance(data.balance),
 			certified: false,
 		}
-		if (isTestnet()) config.host = 'http://localhost:8080';
+		if (isTestnet()) config.host = 'http://localhost:8080'
 		startBalancesTimer(config)
 
 		return () => stopBalancesTimer()
@@ -74,6 +75,9 @@ const App = () => {
 
 	return (
 		<div className="w-screen h-screen flex flex-col justify-center items-center">
+			<div className="absolute top-3 left-2">
+				<ThemeSwitcher />
+			</div>
 			{!!identity && (
 				<div className="badge badge-primary absolute top-3 right-2 h-10">{identity?.getPrincipal()?.toText()}</div>
 			)}
