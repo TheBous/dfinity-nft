@@ -7,13 +7,20 @@ import { decodeIcrcAccount } from '@dfinity/ledger-icrc'
 import { transactionFee } from '../utils/dfinity/icrc1/methods/fees'
 import useBalanceWorker from '../hooks/worker/useBalanceWorker'
 import Transactions from './transactions/Transactions'
+import useAuthWorker from '../hooks/worker/useAuthWorker'
 
 const App = () => {
 	const { identity, internetIdentitySync, internetIdentityLogin, internetIdentityLogout } = useAuth()
 	const [address, setAddress] = useState('')
 	const [amount, setAmount] = useState(BigInt(0))
 
-	const { startBalancesTimer, stopBalancesTimer, balance, setBalance } = useBalanceWorker(true)
+	const { startBalancesTimer, stopBalancesTimer, balance, setBalance } = useBalanceWorker(true);
+	const { syncAuthIdle } = useAuthWorker();
+
+	useEffect(() => {
+		syncAuthIdle(identity?.getPrincipal()?.toString());
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [identity?.getPrincipal()?.toString()])
 
 	useEffect(() => {
 		startBalancesTimer({
