@@ -8,6 +8,7 @@ import { transactionFee } from '../utils/dfinity/icrc1/methods/fees'
 import useBalanceWorker from '../hooks/worker/useBalanceWorker'
 import Transactions from './transactions/Transactions'
 import useAuthWorker from '../hooks/worker/useAuthWorker'
+import isTestnet from '../utils/dfinity/utils/isTestnet'
 
 const App = () => {
 	const { identity, internetIdentitySync, internetIdentityLogin, internetIdentityLogout } = useAuth()
@@ -28,7 +29,7 @@ const App = () => {
 			accountIdentifier: identity?.getPrincipal()?.toString(),
 			callback: data => setBalance(data.balance),
 			certified: false,
-			host: 'http://localhost:8080' || 'canister',
+			host: isTestnet() ? 'http://localhost:8080' : `http://${process.env.CANISTER_ID_THEBOUS}.icp0.io/`,
 		})
 
 		return () => stopBalancesTimer()

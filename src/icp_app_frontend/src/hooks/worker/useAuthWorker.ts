@@ -29,6 +29,8 @@ const useAuthWorker = (): AuthWorker => {
                     return;
             }
         };
+
+        return () => authWorker.onmessage = null;
     }, [logout]);
 
 
