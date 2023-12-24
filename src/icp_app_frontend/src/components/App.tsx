@@ -5,10 +5,11 @@ import { useAuth } from '../hooks/auth/useAuth'
 import executeIcrcTransfer from '../utils/dfinity/icrc1/methods/transfer'
 import { decodeIcrcAccount } from '@dfinity/ledger-icrc'
 import { transactionFee } from '../utils/dfinity/icrc1/methods/fees'
-import useBalanceWorker from '../hooks/worker/useBalanceWorker'
+import useBalanceWorker, { BalancesCallback } from '../hooks/worker/useBalanceWorker'
 import Transactions from './transactions/Transactions'
 import useAuthWorker from '../hooks/worker/useAuthWorker'
 import isTestnet from '../utils/dfinity/utils/isTestnet'
+import { PostMessageDataRequestBalance } from '../types/workers/post-message.balances'
 
 const App = () => {
 	const { identity, internetIdentitySync, internetIdentityLogin, internetIdentityLogout } = useAuth()
@@ -24,13 +25,16 @@ const App = () => {
 	}, [identity?.getPrincipal()?.toString()])
 
 	useEffect(() => {
-		startBalancesTimer({
+		const config: {
+			callback: BalancesCallback
+		} & Omit<PostMessageDataRequestBalance, 'fetchRootKey'> = {
 			ledgerCanisterId: process.env.CANISTER_ID_THEBOUS,
 			accountIdentifier: identity?.getPrincipal()?.toString(),
 			callback: data => setBalance(data.balance),
 			certified: false,
-			host: isTestnet() ? 'http://localhost:8080' : `http://${process.env.CANISTER_ID_THEBOUS}.icp0.io/`,
-		})
+		}
+		if (isTestnet()) config.host = 'http://localhost:8080';
+		startBalancesTimer(config)
 
 		return () => stopBalancesTimer()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
