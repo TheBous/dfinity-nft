@@ -13,7 +13,6 @@ export const createAgentWrapper = async ({ identity, host }: { identity: Identit
 		const agent = await createAgent({
 			identity,
 			...(host !== undefined && { host }),
-			// fetchRootKey: FETCH_ROOT_KEY,
 		})
 
 		agents = {

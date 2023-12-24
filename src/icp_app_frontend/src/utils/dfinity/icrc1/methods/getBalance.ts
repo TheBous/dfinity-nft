@@ -8,17 +8,20 @@ interface GetIcrc1Balance {
 	data: {
 		ledgerCanisterId: string
 		certified?: boolean
+		host?: string
 	}
 }
 
 const getIcrc1Balance = async ({
 	identity,
-	data: { ledgerCanisterId, certified = false },
+	data: { ledgerCanisterId, certified = false, host },
 }: GetIcrc1Balance): Promise<bigint> => {
 	const principal = identity.getPrincipal().toText()
+
 	const { canister: { balance: getBalance } = {} } = await createIcrcCanister({
 		identity,
 		canisterId: mapCanisterId(ledgerCanisterId),
+		host,
 	})
 
 	const account = decodeIcrcAccount(principal)

@@ -1,1 +1,1 @@
-dfx deploy thebous_index --network="ic" --argument '(opt variant{Init = record {ledger_id = principal "wwzri-ryaaa-aaaak-qcxtq-cai"}})'
+dfx deploy thebous_index --argument '(opt variant{Init = record {ledger_id = principal "bkyz2-fmaaa-aaaaa-qaaaq-cai"}})'

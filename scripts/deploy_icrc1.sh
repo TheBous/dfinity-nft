@@ -1,4 +1,4 @@
-dfx deploy --network="ic" thebous --argument '
+dfx deploy thebous --argument '
   (variant {
     Init = record {
       token_name = "thebous";
