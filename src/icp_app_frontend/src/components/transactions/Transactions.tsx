@@ -32,7 +32,7 @@ const Transactions = () => {
 	}, [identity])
 	if (!identity) return null
 	return (
-		<div className="collapse collapse-arrow bg-base-200 w-96 mt-5" onClick={() => setIsAccordionOpened(!isAccordionOpened)}>
+		<div className="collapse collapse-arrow bg-base-200 w-96" onClick={() => setIsAccordionOpened(!isAccordionOpened)}>
 			<input type="radio" name="my-accordion-2" checked={isAccordionOpened} />
 			<div className="collapse-title text-xl font-medium">Transactions</div>
 			<div className="collapse-content">
