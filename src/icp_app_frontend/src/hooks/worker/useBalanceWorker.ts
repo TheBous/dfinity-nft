@@ -16,7 +16,7 @@ let balanceCallback: BalancesCallback | undefined
 
 const useBalanceWorker = (initialFetch = false) => {
 	const { identity } = useAuth()
-	const { balance, setBalance } = useBalanceStore();
+	const { balance, setBalance } = useBalanceStore()
 
 	useEffect(() => {
 		const getBalance = async () => {
