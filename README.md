@@ -6,14 +6,17 @@
 
 Install DFX locally
 
+Install dependencies
 ```bash
 npm i 
 ```
 
+Start IC network locally
 ```bash
 dfx start --background --clean
 ```
 
+export in PRINCIPAL your own principal
 ```bash
 export PRINCIPAL=$(dfx identity get-principal)                                                                                                                                                                                                   
 ```
