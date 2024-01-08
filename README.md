@@ -2,6 +2,72 @@
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#commands)
 
+# Start project
+
+Install DFX locally
+
+```bash
+npm i 
+```
+
+```bash
+dfx start --background --clean
+```
+
+```bash
+export PRINCIPAL=$(dfx identity get-principal)                                                                                                                                                                                                   
+```
+
+
+Deploy thebous token locally
+```bash
+dfx deploy thebous --argument '
+  (variant {
+    Init = record {
+      token_name = "thebous";
+      token_symbol = "THB";
+      minting_account = record {
+        owner = principal "'${PRINCIPAL}'";
+      };
+      initial_balances = vec {
+        record {
+          record {
+            owner = principal "'${PRINCIPAL}'";
+          };
+          1_000_000_000;
+        };
+      };
+      metadata = vec {};
+      transfer_fee = 10_000;
+      archive_options = record {
+        trigger_threshold = 2000;
+        num_blocks_to_archive = 1000;
+        controller_id = principal "'${PRINCIPAL}'";
+      };
+    }
+  })
+'
+```
+
+Deploy thebous index canister locally
+```bash
+dfx deploy thebous_index --argument '(opt variant{Init = record {ledger_id = principal "bkyz2-fmaaa-aaaaa-qaaaq-cai"}})'
+```
+
+Deploy all canisters
+```bash
+dfx deploy
+```
+
+Start frontend
+```bash
+yarn start
+```
+
+# Demo
+You can find a demo of thebous coin here: 
+https://xvvyo-faaaa-aaaak-qcxva-cai.icp0.io/
+
 # ➤ Commands
 
 > deploy:ic
